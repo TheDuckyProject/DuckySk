@@ -1,0 +1,105 @@
+options:
+	P: &d[Ducky] #Prefix
+	H: &a #Highlight Color
+	C: &7 #Primary Color
+	L: &9&o #Link Color
+	HiDucky: true #"hi ducky" command
+	ByeDucky: true #"bye ducky" command
+	ThanksDucky: true #"thanks ducky" command
+	SayGoodbye: true #"say goodbye" command
+	Decide: true #ducky decide command
+	OMGHi: true #"omg hi" command
+	Compare: true #"ducky compare" command
+	PenisSize: true #"what is [@]person['s] penis (length|size)" command
+	DuckImage: true #"what does a duck look like" command
+	SuckSwallow: true #Saying any form of "ducky sucks" says something along the lines of "%player% swallows"
+
+on chat:
+	if message contains "hi ducky":
+		{@HiDucky} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} Hi {@H}%player%{@C}!"
+	else if message contains "bye ducky":
+		{@ByeDucky} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} You're leaving? Bye {@H}%player% {@C}:("
+	else if message contains "thanks ducky":
+		{@ThanksDucky} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} No problem, {@H}%player%"
+	else if message contains "say goodbye":
+		{@SayGoodbye} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} Goodbye Everyone! See you all later :)"
+	else if message contains "ducky decide":
+		{@Decide} is true
+		set {_l} to "%message%"
+		replace all "ducky decide " with "" in {_l}
+		set {_dec::*} to {_l} split at " or "
+		wait 2 ticks
+		broadcast "{@P}{@C} Hmmmm.... I choose {@H}%random element out of {_dec::*}%"
+	else if message contains "omg hi":
+		{@OMGHi} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} omgggg! Hiya {@H}%player%"
+	else if message contains "ducky compare":
+		{@Compare} is true
+		set {_l} to "%message%"
+		replace all "ducky compare " with "" in {_l}
+		replace all " and " with " to " in {_l}
+		set {_s::*} to {_l} split at " to "
+		set {_compare1::*} to {_s::1} split at ""
+		set {_compare2::*} to {_s::2} split at ""
+		set {_r} to ""
+		set {_r2} to ""
+		loop {_compare1::*}:
+			if {_compare2::%loop-index%} is loop-value:
+				set {_r} to "%{_r}%&a%loop-value%"
+			else:
+				set {_r} to "%{_r}%&c%loop-value%"
+		loop {_compare2::*}:
+			if {_compare1::%loop-index%} is loop-value:
+				set {_r2} to "%{_r2}%&a%loop-value%"
+			else:
+				set {_r2} to "%{_r2}%&c%loop-value%"
+		wait 2 ticks
+		broadcast "{@P}{@C} Comparing results: %{_r}% {@C}and %{_r2}%"
+	else if message contains "what is" and "penis":
+		{@PenisSize} is true
+		wait 2 ticks
+		set {_l} to "%uncolored message%"
+		replace all "ducky", "what is", "@", "penis", "size", "length", "s" and "'" with "" in {_l}
+		replace all " " with "" in {_l}
+		if {ducky::size::%{_l}%} is set:
+			set {_penis} to {ducky::size::%{_l}%}
+		else:
+			set {_penis} to "8"
+			loop (a random integer between 0 and 15) times:
+				set {_penis} to "%{_penis}%="
+			set {_penis} to "%{_penis}%D"
+			set {ducky::size::%{_l}%} to {_penis}
+		broadcast "{@P}{@C}{@H} %{_l}%'s{@C} penis size is {@H}%{_penis}%"
+	else if message contains "what" and " a duck look like":
+		{@DuckImage} is true
+		wait 2 ticks
+		broadcast "{@P}{@C}Hey {@H} %player%{@C}, a duck looks like {@L}http://nfell2009.uk/files/duck.jpg"
+	else if message contains "u suck ducky":
+		{@SuckSwallow} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} u swallow {@H}%player%"
+	else if message contains "ducky sucks":
+		{@SuckSwallow} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} {@H}%player%{@C} swallows"
+	else if message contains "ducky u suck":
+		{@SuckSwallow} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} {@H}%player%{@C} u swallow"
+	else if message contains "ducky you suck":
+		{@SuckSwallow} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} {@H}%player%{@C} you swallow"
+	else if message contains "you suck ducky":
+		{@SuckSwallow} is true
+		wait 2 ticks
+		broadcast "{@P}{@C} you swallow {@H}%player%"
